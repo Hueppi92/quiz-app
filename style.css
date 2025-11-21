@@ -21,6 +21,38 @@ body {
     justify-content: space-between;
     border-top: 1px solid rgba(223, 218, 218, 0.4);
     padding-top:12px;
+    margin-top:32px;
     
+}
+
+.card-title {
+    min-height:64px;
+}
+
+.card-img-top {
+    height:250px;
+}
+.answer-card:hover {
+    cursor: pointer;
+    background-color: #c7eeffb0;
+
+}
+
+ .wrong {
+ color: red;
+ 
+}
+
+.right {
+    color:green;
+    text-align: centers;
+}
+
+#rightWrong {
+    height:64px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    font-size:24px;
 }
 

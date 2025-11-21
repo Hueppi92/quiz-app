@@ -10,44 +10,46 @@
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 </head>
-<body>
+<body onload="init()">
     
 
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <span class="navbar-brand mb-0 h1">Quiz-App</span>
+    <span id="yourResult"></span>
   </div>
 </nav>
 <div class="container">
 <div class="card quiz-card">
   <img src="./assets/logo/quiz-logo.jpg" class="card-img-top" alt="...">
   <div class="card-body">
-    <h5 class="card-title">Frage</h5>
+    <h5 class="card-title" id="questionText">Frage</h5>
     <div class="card mb-2">
-  <div class="card-body">
+  <div class="card-body answer-card" id="answer_1" onclick="checkAnswer('answer_1');">
     Antwort
   </div>
 </div>
-<div class="card mb-2">
-  <div class="card-body">
+<div class="card mb-2 answer-card">
+  <div class="card-body" id="answer_2" onclick="checkAnswer('answer_2');">
     Antwort
   </div>
 </div>
-<div class="card mb-2">
-  <div class="card-body">
+<div class="card mb-2 answer-card">
+  <div class="card-body" id="answer_3" onclick="checkAnswer('answer_3');">
     Antwort
   </div>
 </div>
-<div class="card mb-2">
-  <div class="card-body">
+<div class="card mb-2 answer-card">
+  <div class="card-body" id="answer_4" onclick="checkAnswer('answer_4');">
     Antwort
   </div>
 </div>
+<div id="rightWrong" class="wrong"></div>
    <div class="question-footer">
     <span>
-  <b>1</b> von <b>5 </b> Fragen
+  <b id="currentQuestion"></b> von <b id="questionCounter"> </b> Fragen
 </span>
-  <button class="btn btn-light">Nächste Frage</button>
+  <button class="btn btn-light" onclick="nextQuestion()">Nächste Frage</button>
 </div>
 
 </div>
