@@ -66,60 +66,89 @@ let questions = [
   },
 ];
 
-let currentQuestion = 1;
-let anzeige = document.getElementById("rightWrong");
+let currentQuestion = 0;
+let currentQuestionMarker = 1;
 let result = 0;
+let clicked = false;
+const endScreen = document.getElementById("endScreen");
 
 function init() {
+endScreen.style.display = "none";
   countQuestions();
   showQuestion();
 }
 
 function showQuestion() {
-  let resultTag = document.getElementById("yourResult").innerHTML = `Dein Punktestand lautet: ` + result;
+  let resultTag = (document.getElementById("yourResult").innerHTML =
+    `Dein Punktestand lautet: ` + result);
+  resetRightWrongMarker();
+
   let question = questions[currentQuestion];
   document.getElementById("questionText").innerHTML = question["question"];
   document.getElementById("answer_1").innerHTML = question["answer_1"];
   document.getElementById("answer_2").innerHTML = question["answer_2"];
   document.getElementById("answer_3").innerHTML = question["answer_3"];
   document.getElementById("answer_4").innerHTML = question["answer_4"];
-
-
 }
 
 function nextQuestion() {
-  
-  if (currentQuestion == questions.length) {
-     window.alert("Das Spiel ist beendet. Deine Punktzahl lautet: " + result);
-  } else {
-    currentQuestion += 1;
-    let currentCount = (document.getElementById("currentQuestion").innerHTML =
-      currentQuestion);
-    anzeige.innerHTML = "";
+  if (currentQuestion === questions.length - 1) {
+    const questionBody = document.getElementById("questionBody");
+
+    questionBody.style.display = "none";
+
+    endScreen.innerHTML = `
+      <p>Das Spiel ist beendet.<br>
+      Deine Punktzahl lautet: ${result} / ${questions.length}</p>
+    `;
+
+    endScreen.style.display = "flex";
+    return;
   }
+
+ 
+  currentQuestion += 1;
+  currentQuestionMarker += 1;
+
+  document.getElementById("currentQuestion").innerHTML = currentQuestionMarker;
+
+  clicked = false;
   showQuestion();
+  document.getElementById("next").classList.add("disabled");
 }
 function countQuestions() {
   let count = questions.length;
   let counter = document.getElementById("questionCounter");
   counter.innerHTML = count;
   let currentCount = (document.getElementById("currentQuestion").innerHTML =
-    currentQuestion);
+    currentQuestionMarker);
 }
 
-function checkAnswer(questionIndex) {
-  let question = questions[currentQuestion];
-  let anzeige = document.getElementById("rightWrong");
+function checkAnswer(answerId) {
+  if (clicked) return;
 
-  if (questionIndex == question["right_answer"]) {
-    
-    result += 1;
-    
-    document.getElementById(questionIndex).parentNode.classList.add("bg-success");
-    setTimeout(nextQuestion, 2000);
-    
+  const question = questions[currentQuestion];
+  const rightAnswerId = question.right_answer;
+
+  resetRightWrongMarker();
+
+  const selectedEl = document.getElementById(answerId);
+  const correctEl = document.getElementById(rightAnswerId);
+
+  if (answerId === rightAnswerId) {
+    result++;
+    selectedEl.parentNode.classList.add("bg-success");
   } else {
-      document.getElementById(questionIndex).parentNode.classList.add("bg-danger");
+    selectedEl.parentNode.classList.add("bg-danger");
+    correctEl.parentNode.classList.add("bg-success");
   }
- 
+
+  clicked = true;
+  document.getElementById("next").classList.remove("disabled");
+}
+
+function resetRightWrongMarker() {
+  document.querySelectorAll(".bg-success, .bg-danger").forEach((el) => {
+    el.classList.remove("bg-success", "bg-danger");
+  });
 }

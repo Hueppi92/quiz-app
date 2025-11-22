@@ -20,12 +20,17 @@
   </div>
 </nav>
 <div class="container">
-<div class="card quiz-card">
-  <img src="./assets/logo/quiz-logo.jpg" class="card-img-top" alt="...">
+
+   <div class="card card-body" id="endScreen">
+    
+  </div>
+
+<div class="card quiz-card" id="questionBody">
+  <img src="./assets/logo/quiz-logo.png" class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title" id="questionText">Frage</h5>
     <div class="card mb-2">
-  <div class="card-body answer-card" id="answer_1" onclick="checkAnswer('answer_1');">
+  <div class="card-body answer-card" id="answer_1" onclick="checkAnswer('answer_1'); ">
     Antwort
   </div>
 </div>
@@ -49,13 +54,12 @@
     <span>
   <b id="currentQuestion"></b> von <b id="questionCounter"> </b> Fragen
 </span>
-  <button class="btn btn-light" onclick="nextQuestion()">Nächste Frage</button>
+  <button class="btn btn-light disabled" id="next" onclick="nextQuestion()">Nächste Frage</button>
 </div>
 
 </div>
   </div>
 </div>
-
 
 
 <script src="script.js"></script>
