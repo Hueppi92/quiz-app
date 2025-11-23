@@ -1,4 +1,9 @@
+html {
+     cursor: url(./assets/logo/cursor_harry.PNG), pointer ;
+}
+
 body {
+    margin: 0 auto;
   background-color: #c7eeff !important;
   background-image: url("./assets/img/hogwarts_bg.jpg");
   background-size: cover;
@@ -6,6 +11,7 @@ body {
   background-position: center center;
   background-attachment: fixed;
   min-height: 100vh;
+  
 }
 
 .container {
@@ -108,6 +114,8 @@ body {
   width: 32px;
   border-radius: 50%;
 }
+
+
 
 
 @media (max-width: 576px) {
