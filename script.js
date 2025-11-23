@@ -1,86 +1,29 @@
-let questions = [
-  {
-    question: "Wie heißt die Zauberschule, auf die Harry geht?",
-    answer_1: "Hogwarts",
-    answer_2: "Durmstrang",
-    answer_3: "Beauxbatons",
-    answer_4: "Ilvermorny",
-    right_answer: "answer_1",
-  },
-  {
-    question: "Welcher Zauber öffnet Türen?",
-    answer_1: "Stupefy",
-    answer_2: "Alohomora",
-    answer_3: "Imperio",
-    answer_4: "Expelliarmus",
-    right_answer: "answer_2",
-  },
-  {
-    question: "Wie lautet der zweite Vorname von Harry Potter?",
-    answer_1: "Arthur",
-    answer_2: "James",
-    answer_3: "Regulus",
-    answer_4: "Sirius",
-    right_answer: "answer_2",
-  },
-  {
-    question: "Wie heißt der Direktor von Hogwarts im ersten Band?",
-    answer_1: "Albus Dumbledore",
-    answer_2: "Horace Slughorn",
-    answer_3: "Minerva McGonagall",
-    answer_4: "Severus Snape",
-    right_answer: "answer_1",
-  },
-  {
-    question: "Welches magische Objekt zeigt Harry seine tiefsten Wünsche?",
-    answer_1: "Zeitumkehrer",
-    answer_2: "Denkarium",
-    answer_3: "Spiegel Nerhegeb",
-    answer_4: "Marauders Karte",
-    right_answer: "answer_3",
-  },
-  {
-    question: "Welche Form hat Hermines Patronus?",
-    answer_1: "Otter",
-    answer_2: "Katze",
-    answer_3: "Pferd",
-    answer_4: "Fuchs",
-    right_answer: "answer_1",
-  },
-  {
-    question:
-      "Wie heißt der dreiköpfige Hund, der den Stein der Weisen bewacht?",
-    answer_1: "Fang",
-    answer_2: "Fluffy",
-    answer_3: "Norbert",
-    answer_4: "Hedwig",
-    right_answer: "answer_2",
-  },
-  {
-    question: "Wie heißt der Zaubertrank, der absolute Wahrheit erzwingt?",
-    answer_1: "Felix Felicis",
-    answer_2: "Veritaserum",
-    answer_3: "Amortentia",
-    answer_4: "Essenz des Fuchses",
-    right_answer: "answer_2",
-  },
-];
-
 let currentQuestion = 0;
 let currentQuestionMarker = 1;
 let result = 0;
 let clicked = false;
+let AUDIO_SUCCESS = new Audio('./assets/sounds/success.mp3');
+let AUDIO_FAIL = new Audio('./assets/sounds/fail.mp3');
+let AUDIO_ENDMUSIC = new Audio('./assets/sounds/magic.mp3');
 const endScreen = document.getElementById("endScreen");
 
 function init() {
-endScreen.style.display = "none";
+    document.getElementById("next").classList.add("disabled");
+  AUDIO_ENDMUSIC.pause();
+  AUDIO_ENDMUSIC.currentTime = 0;
+  endScreen.style.display = "none";
+  currentQuestion = 0;
+  currentQuestionMarker = 1;
+  result = 0;
+  clicked = false;
+  const questionBody = document.getElementById("questionBody");
+  questionBody.style.display = "";
+  renderProgressBar();
   countQuestions();
   showQuestion();
 }
 
 function showQuestion() {
-  let resultTag = (document.getElementById("yourResult").innerHTML =
-    `Dein Punktestand lautet: ` + result);
   resetRightWrongMarker();
 
   let question = questions[currentQuestion];
@@ -92,30 +35,23 @@ function showQuestion() {
 }
 
 function nextQuestion() {
+AUDIO_FAIL.pause();
+AUDIO_FAIL.currentTime = 0;
+AUDIO_SUCCESS.pause();
+AUDIO_SUCCESS.currentTime = 0;
   if (currentQuestion === questions.length - 1) {
-    const questionBody = document.getElementById("questionBody");
-
-    questionBody.style.display = "none";
-
-    endScreen.innerHTML = `
-      <p>Das Spiel ist beendet.<br>
-      Deine Punktzahl lautet: ${result} / ${questions.length}</p>
-    `;
-
-    endScreen.style.display = "flex";
+    AUDIO_ENDMUSIC.play();
+    renderEndScreen();
     return;
   }
-
- 
   currentQuestion += 1;
   currentQuestionMarker += 1;
-
   document.getElementById("currentQuestion").innerHTML = currentQuestionMarker;
-
   clicked = false;
   showQuestion();
   document.getElementById("next").classList.add("disabled");
 }
+
 function countQuestions() {
   let count = questions.length;
   let counter = document.getElementById("questionCounter");
@@ -126,29 +62,68 @@ function countQuestions() {
 
 function checkAnswer(answerId) {
   if (clicked) return;
-
   const question = questions[currentQuestion];
   const rightAnswerId = question.right_answer;
-
-  resetRightWrongMarker();
-
+  resetRightWrongMarker();  
+  let progressId = `progressImg_${currentQuestion}`;
   const selectedEl = document.getElementById(answerId);
   const correctEl = document.getElementById(rightAnswerId);
-
   if (answerId === rightAnswerId) {
     result++;
     selectedEl.parentNode.classList.add("bg-success");
+    document.getElementById(progressId).classList.add("bg-success");
+    const progressImgEl = document.getElementById(progressId);
+    progressImgEl.src = "./assets/logo/progress-logo-right.JPG";
+    AUDIO_SUCCESS.play();
   } else {
     selectedEl.parentNode.classList.add("bg-danger");
     correctEl.parentNode.classList.add("bg-success");
+    const progressImgEl = document.getElementById(progressId);
+    progressImgEl.src = "./assets/logo/progress-logo-wrong.JPG";
+    AUDIO_FAIL.play();
   }
-
-  clicked = true;
   document.getElementById("next").classList.remove("disabled");
+  clicked = true;
 }
 
 function resetRightWrongMarker() {
   document.querySelectorAll(".bg-success, .bg-danger").forEach((el) => {
     el.classList.remove("bg-success", "bg-danger");
   });
+}
+
+function renderEndScreen() {
+  const questionBody = document.getElementById("questionBody");
+  questionBody.style.display = "none";
+  if (result <= questions.length * 0.25) {
+    trophySrc = "bronce";
+  } else if (result >= questions.length * 0.75) {
+    trophySrc = "gold";
+  } else {
+    trophySrc = "silver";
+  }
+  if (trophySrc === "gold") {
+    message = "Fantastisch! Du bist ein echter Quiz-Meister!";
+  } else if (trophySrc === "silver") {
+    message = "Gut gemacht! Da geht noch mehr!";
+  } else {
+    message = "Übung macht den Meister! Versuch es gleich nochmal.";
+  }
+  endScreen.innerHTML = `<h3>${message}</h3> 
+      <img id="trophy" src="./assets/img/trophy_${trophySrc}.png">
+      <p>Deine Punktzahl lautet: ${result} / ${questions.length}</p> 
+      <button class="btn btn-light" onclick="init()">Neustart</button>`;
+  endScreen.style.display = "flex";
+}
+
+function renderProgressBar() {
+  let progressBar = document.getElementById("progressBar");
+  if (!progressBar) {
+    console.error("Das Element mit der ID 'progressBar' wurde nicht gefunden!");
+    return;
+  }
+  progressBar.innerHTML = "";
+  for (let i = 0; i < questions.length; i++) {
+    progressBar.innerHTML += `<img id="progressImg_${i}" src="./assets/logo/progress-logo.JPG" class="card-img-top" alt="...">`;
+  }
 }

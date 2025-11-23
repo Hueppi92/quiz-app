@@ -16,17 +16,19 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <span class="navbar-brand mb-0 h1">Quiz-App</span>
-    <span id="yourResult"></span>
+   
   </div>
 </nav>
 <div class="container">
 
-   <div class="card card-body" id="endScreen">
+  <div class="card mb-2 quiz-card" id="endScreen">
+  
     
   </div>
 
 <div class="card quiz-card" id="questionBody">
   <img src="./assets/logo/quiz-logo.png" class="card-img-top" alt="...">
+  <div id="progressBar"></div>
   <div class="card-body">
     <h5 class="card-title" id="questionText">Frage</h5>
     <div class="card mb-2">
@@ -49,7 +51,7 @@
     Antwort
   </div>
 </div>
-<div id="rightWrong" class="wrong"></div>
+
    <div class="question-footer">
     <span>
   <b id="currentQuestion"></b> von <b id="questionCounter"> </b> Fragen
@@ -63,5 +65,6 @@
 
 
 <script src="script.js"></script>
+<script src="db.js"></script>
 </body>
 </html>
